@@ -97,9 +97,7 @@ def prf(img,yk):
   return prlist
 
 def shrink(img,mark):
-  #tmp=img2list(img)
   tmp=img.copy()
-  #resimg=Image.new('1',(tmp.width,tmp.height),0)
   def h(b,c,d,e):
     if( b==c and (d!=b or e!=b)):
       return 1
@@ -123,7 +121,6 @@ def shrink(img,mark):
           h(p[0],p[4],p[5],p[1]),
           p[0])
         tmp.putpixel((j+1,i+1),val)
-        #resimg.putpixel((j+1,i+1),val)
 
   return tmp
 
@@ -146,3 +143,12 @@ def thin(img):
 im3=thin(im2)
 im3.show()
 im3.save('lena_out.bmp')
+res=img2list(im3)
+with open('thinning.txt','w+') as f:
+  for item in res:
+    for items in item:
+      if items:
+        f.write('*')
+      else:
+        f.write(' ')
+    f.write('\n')
