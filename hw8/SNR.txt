@@ -1,0 +1,25 @@
+SNRs :
+gaussian 10:13.605330
+gaussian 10 box3:17.747707
+gaussian 10 box5:14.860635
+gaussian 10 median3:17.587003
+gaussian 10 median5:15.846843
+gaussian 10 open-close:8.827726
+gaussian 30:4.179051
+gaussian 30 box3:12.602597
+gaussian 30 box5:13.281477
+gaussian 30 median3:11.014242
+gaussian 30 median5:12.594258
+gaussian 30 open-close:-0.499788
+salt & pepper 5:3.953578
+salt & pepper 5 box3:12.201787
+salt & pepper 5 box5:12.888926
+salt & pepper 5 median3:19.855045
+salt & pepper 5 median5:16.361394
+salt & pepper 5 open-close:-8.263356
+salt & pepper 10:0.880013
+salt & pepper 10 box3:9.433196
+salt & pepper 10 box5:11.133876
+salt & pepper 10 median3:18.515387
+salt & pepper 10 median5:15.814909
+salt & pepper 10 open-close:-8.807538
