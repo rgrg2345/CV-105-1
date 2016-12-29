@@ -10,11 +10,16 @@ laplk=[0 1 0;
 
 %% task1
 laplacian=zeros(h-2,w-2);
+tmp=zeros(h-2,w-2);
 for i =1 :w-2
     for j = 1 :h-2
-        val=convolution(img(i:i+2,j:j+2),laplk);
-        if val>=15 
-            laplacian(i,j)=0;
+        tmp(i,j)=convolution(img(i:i+2,j:j+2),laplk);
+    end    
+end
+for i =1 :w-2
+    for j = 1 :h-2
+        if( tmp(i,j)>=15 && zerocross(tmp,i,j,1,15) == 1)
+           laplacian(i,j)=0;
         else
             laplacian(i,j)=255;
         end
@@ -28,11 +33,16 @@ mvlaplk=[2 -1 2;
         2 -1 2
 ];
 mvlaplacian=zeros(h-2,w-2);
+tmp=zeros(h-2,w-2);
 for i =1 :w-2
     for j = 1 :h-2
-        val=convolution(img(i:i+2,j:j+2),mvlaplk)/3;
-        if val>=20 
-            mvlaplacian(i,j)=0;
+        tmp(i,j)=convolution(img(i:i+2,j:j+2),mvlaplk)/3;
+    end    
+end
+for i =1 :w-2
+    for j = 1 :h-2
+        if( tmp(i,j)>=20 && zerocross(tmp,i,j,1,20) == 1)
+           mvlaplacian(i,j)=0;
         else
             mvlaplacian(i,j)=255;
         end
@@ -54,17 +64,22 @@ laogker=[0 0 0 -1 -1 -2 -1 -1 0 0 0 ;
          0, 0, 0, -1, -1, -2, -1, -1, 0, 0, 0
         ];
 laplaofgaus=zeros(h-10,w-10);
+tmp=zeros(h-10,w-10);
 for i =1 :w-10
     for j = 1 :h-10
-        val=convolution(img(i:i+10,j:j+10),laogker);
-        if val>=3500
-            mvlaplacian(i,j)=0;
+        tmp(i,j)=convolution(img(i:i+10,j:j+10),laogker);
+    end    
+end
+for i =1 :w-10
+    for j = 1 :h-10
+        if( tmp(i,j)>=3000 && zerocross(tmp,i,j,1,3000) == 1)
+           laplaofgaus(i,j)=0;
         else
-            mvlaplacian(i,j)=255;
+            laplaofgaus(i,j)=255;
         end
     end    
 end
-imwrite(uint8(mvlaplacian),'laplaceofGaus.png');
+imwrite(uint8(laplaofgaus),'laplaceofGaus.png');
 
 %% task4
 h1 = fspecial('gaussian', [11 11], 3);
@@ -87,7 +102,7 @@ for i =1 :w-10
 end
 dofgaus=dofgaus-dofgaus2;
 imwrite(dofgausimg,'dofGaus.png');
-
+sum(sum(h2))
 %% output
 fileID = fopen('result.txt','w+');
 fprintf(fileID,'Laplacian :\n threshold=%d\n',15);
@@ -105,7 +120,7 @@ function str=m2str(mat)
    [h w]=size(mat);
    for i=1:h
        for j=1:w
-           str=sprintf('%s%3d ',str,mat(i,j));
+           str=sprintf('%s%f ',str,mat(i,j));
        end
        str=sprintf('%s\n',str);
    end
@@ -118,6 +133,26 @@ function val=convolution(imgmat,kernel)
     for i =1:kh
         for j =1 :kw
            val=val+double(imgmat(i,j))*kernel(kh-i+1,kw-j+1);
+        end
+    end
+end
+%% type 0 :find negative, 1:find positive
+function cross=zerocross(img,i,j,type,t)
+    [h,w]=size(img);
+    dx=[-1 0 1 -1  1 -1 0 1];
+    dy=[-1 -1 -1 0 0 1 1 1];
+    cross=0;
+    for k =1 :8
+        if( i+dy(k)>0 && i+dy(k)<=w && j+dx(k)>0 && j+dx(k)<=h )
+           if type==0
+               if img(i+dy(k),j+dx(k)) >=t
+                   cross=1;
+               end
+           else
+               if img(i+dy(k),j+dx(k)) <=-t
+                   cross=1;
+               end
+           end
         end
     end
 end
