@@ -93,14 +93,19 @@ for i =1 :w-10
         dofgaus(i,j)=val1;
         val2=convolution(img(i:i+10,j:j+10),h2);
         dofgaus2(i,j)=val2;
-        if val1-val2 >=2.5
-            dofgausimg(i,j)=0;
+    end    
+end
+dofgaus=dofgaus-dofgaus2;
+for i =1 :w-10
+    for j = 1 :h-10
+        if( dofgaus(i,j)>=2.5 && zerocross(dofgaus,i,j,1,2.5) == 1)
+           dofgausimg(i,j)=0;
         else
             dofgausimg(i,j)=255;
         end
     end    
 end
-dofgaus=dofgaus-dofgaus2;
+
 imwrite(dofgausimg,'dofGaus.png');
 sum(sum(h2))
 %% output
